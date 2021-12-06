@@ -6,12 +6,8 @@ export interface Todo {
   isDone: boolean;
 }
 
-class TodoStore {
-  list: Todo[] = [];
-
-  constructor() {
-    makeAutoObservable(this);
-  }
+const TodoStore = () => makeAutoObservable({
+  list: [] as Todo[],
 
   add(title: string) {
     if (title.length < 3) {
@@ -23,15 +19,15 @@ class TodoStore {
       title,
       isDone: false,
     })
-  }
+  },
 
   toggle(todo: Todo) {
     todo.isDone = !todo.isDone;
-  }
+  },
 
   remove(todo: Todo) {
     this.list = this.list.filter(todoItem => todoItem.id !== todo.id);
   }
-}
+}); // функция фабрика
 
 export default TodoStore;

@@ -2,7 +2,7 @@ import { createContext, useContext } from "react";
 import TodoStore from "./TodoStore";
 
 const store = {
-  todos: new TodoStore(),
+  todos: TodoStore(),
 } // создаем наш стор, который является объединением всех наших сторов
 
 export const StoreContext = createContext(store); // создаем стандартный контекст реакта
