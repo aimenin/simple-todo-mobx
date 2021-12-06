@@ -1,8 +1,10 @@
 import { FormEvent } from "react";
-import TodoStore from "../../stores/TodoStore";
+import { useStore } from "../../stores";
 import styles from "./TodoInput.module.css";
 
-const TodoInput = ({todos}: {todos: TodoStore}) => {
+const TodoInput = () => {
+  const {todos} = useStore();
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
