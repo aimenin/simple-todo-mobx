@@ -8,7 +8,15 @@ import { observer, useLocalObservable } from 'mobx-react-lite';
 function App() {
   const appUI = useLocalObservable(() => observable({
     todosVisible: true,
+    loading: false,
     toggleTodoVisibility() {
+      appUI.loading = true;
+
+      new Promise(resolve => setTimeout(() => resolve(void 0), 1000))
+        .then(() => {
+          appUI.loading = false;
+          appUI.todosVisible = !appUI.todosVisible;
+        });
       appUI.todosVisible = !appUI.todosVisible;
     },
   }));
@@ -16,6 +24,7 @@ function App() {
   return (
     <div className="app">
       <TodoInput />
+      {String(appUI.loading)}
       <div className={styles['todo-list-wrapper']}>
         <h2 onClick={appUI.toggleTodoVisibility}>
           <span>{appUI.todosVisible ? "-" : "+"}</span>
