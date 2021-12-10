@@ -2,22 +2,20 @@ import React from 'react';
 import TodoInput from './Todo/TodoInput';
 import TodoList from './Todo/TodoList';
 import styles from "./App.module.css";
-import { observable, runInAction } from 'mobx';
+import { observable } from 'mobx';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 
 function App() {
   const appUI = useLocalObservable(() => observable({
     todosVisible: true,
     loading: false,
-    async toggleTodoVisibility() {
+    *toggleTodoVisibility() { // we use generation function to get benefit from cancel operation
       appUI.loading = true;
 
-      await new Promise(resolve => setTimeout(() => resolve(void 0), 1000));
+      yield new Promise(resolve => setTimeout(() => resolve(void 0), 1000));
 
-      runInAction(() => {
-        appUI.loading = false;
-        appUI.todosVisible = !appUI.todosVisible;
-      })
+      appUI.loading = false;
+      appUI.todosVisible = !appUI.todosVisible;
     },
   }));
 
