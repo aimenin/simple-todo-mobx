@@ -4,22 +4,25 @@ import TodoList from './Todo/TodoList';
 import styles from "./App.module.css";
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import { useStore } from './stores';
-import { autorun } from 'mobx';
+import { reaction } from 'mobx';
 
 function App() {
   const {todos} = useStore();
 
   useEffect(() => {
-    const disposeAutorun = autorun(() => {
-      console.log(todos.list.length);
-      throw new Error('new error'); // все ошибки будут выводится только в консоль и не будут прерывать исполнение нашего приложения
+    const disposeReaction = reaction(
+    () => {
+      return {length: todos.list.length, unfinishedTodos: todos.unfinishedTodos};
+    },
+    (oldValue, newValue) => {
+      console.log({ newValue, oldValue }); // oldValue и newValue - это реальный useCase для использования reactions
     }, {
       delay: 1000,
       onError: err => console.log(err.message), // обработка ошибок
     }) // любые действия, которые мы сделаем в течении секунды будут отменены
 
     return () =>  {
-      disposeAutorun(); // делаем такую конструкцию, чтобы избежать утечки памяти
+      disposeReaction(); // делаем такую конструкцию, чтобы избежать утечки памяти
     }
   }, [])
 
