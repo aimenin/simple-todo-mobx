@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import TodoInput from './Todo/TodoInput';
 import TodoList from './Todo/TodoList';
 import styles from "./App.module.css";
@@ -18,6 +18,10 @@ function App() {
       appUI.todosVisible = !appUI.todosVisible;
     },
   }));
+
+  useEffect(() => {
+    console.log({ loading: appUI.loading })
+  }, [appUI.loading]); // we can use useEffect with generate functions
 
   return (
     <div className="app">
