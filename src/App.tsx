@@ -2,7 +2,7 @@ import React from 'react';
 import TodoInput from './Todo/TodoInput';
 import TodoList from './Todo/TodoList';
 import styles from "./App.module.css";
-import { action, observable } from 'mobx';
+import { observable, runInAction } from 'mobx';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 
 function App() {
@@ -13,10 +13,12 @@ function App() {
       appUI.loading = true;
 
       new Promise(resolve => setTimeout(() => resolve(void 0), 1000))
-        .then(action(() => {
-          appUI.loading = false;
-          appUI.todosVisible = !appUI.todosVisible;
-        }));
+        .then(() => {
+          runInAction(() => {
+            appUI.loading = false;
+            appUI.todosVisible = !appUI.todosVisible;
+          }) // we use runInAction in asynchronius functions
+        });
       appUI.todosVisible = !appUI.todosVisible;
     },
   }));
