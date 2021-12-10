@@ -2,23 +2,22 @@ import React from 'react';
 import TodoInput from './Todo/TodoInput';
 import TodoList from './Todo/TodoList';
 import styles from "./App.module.css";
-import { observable, runInAction } from 'mobx';
+import { observable } from 'mobx';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 
 function App() {
   const appUI = useLocalObservable(() => observable({
     todosVisible: true,
     loading: false,
+    receiveData() {
+      appUI.loading = false;
+      appUI.todosVisible = !appUI.todosVisible;
+    },
     toggleTodoVisibility() {
       appUI.loading = true;
 
       new Promise(resolve => setTimeout(() => resolve(void 0), 1000))
-        .then(() => {
-          runInAction(() => {
-            appUI.loading = false;
-            appUI.todosVisible = !appUI.todosVisible;
-          }) // we use runInAction in asynchronius functions
-        });
+        .then(appUI.receiveData);
       appUI.todosVisible = !appUI.todosVisible;
     },
   }));
