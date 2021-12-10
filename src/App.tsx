@@ -2,7 +2,7 @@ import React from 'react';
 import TodoInput from './Todo/TodoInput';
 import TodoList from './Todo/TodoList';
 import styles from "./App.module.css";
-import { observable } from 'mobx';
+import { action, observable } from 'mobx';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 
 function App() {
@@ -13,10 +13,10 @@ function App() {
       appUI.loading = true;
 
       new Promise(resolve => setTimeout(() => resolve(void 0), 1000))
-        .then(() => {
+        .then(action(() => {
           appUI.loading = false;
           appUI.todosVisible = !appUI.todosVisible;
-        });
+        }));
       appUI.todosVisible = !appUI.todosVisible;
     },
   }));
